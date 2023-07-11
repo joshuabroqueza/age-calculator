@@ -8,7 +8,7 @@
   </head>
   <body>
     <main
-      class="bg-[#efefef] flex justify-center md:items-center h-screen  outline"
+      class="bg-[#efefef] flex justify-center md:items-center h-screen outline"
     >
       <section
         class="bg-white w-3/4 border rounded-3xl rounded-br-[150px] shadow-lg p-5 h-3/4 mt-20"
@@ -22,9 +22,17 @@
             >
             <input
               class="border rounded-lg h-16 md:text-3xl font-bold p-3"
-              type="text"
+              type="number"
               placeholder="DD"
+              min="1"
+              max="31"
+              id="dayInput"
             />
+            <span
+              id="invalid_day"
+              class="hidden italic text-[12px] p-2 text-red-600"
+              >Must be a valid day
+            </span>
           </div>
           <div class="input_child flex flex-col p-2 w-1/3 my-2">
             <label
@@ -34,21 +42,36 @@
             >
             <input
               class="border rounded-lg h-16 md:text-3xl font-bold p-3"
-              type="text"
+              type="number"
               placeholder="MM"
+              min="1"
+              max="12"
+              id="monthInput"
             />
+            <span
+              id="invalid_month"
+              class="hidden italic  text-[12px] p-2 text-red-600"
+              >Must be a valid month
+            </span>
           </div>
           <div class="input_child flex flex-col p-2 w-1/3 my-2">
             <label
               class="font-bold text-slate-500 my-1 text-sm tracking-wider"
-              for="day"
+              for="number"
               >YEAR</label
             >
             <input
-              class="border rounded-lg h-16 md:text-3xl font-bold p-3"
+              class="border  rounded-lg h-16 md:text-3xl font-bold p-3"
               type="text"
               placeholder="YYYY"
+              pattern="\d{4}"
+              id="yearInput"
             />
+            <span
+              id="invalid_year"
+              class="hidden italic text-[12px] p-2 text-red-600"
+              >Must be in the past
+            </span>
           </div>
         </div>
 
@@ -62,25 +85,102 @@
 
         <div class="display_container">
           <div class="output_years">
-            <span class="text-6xl text-[#8550fb] font-extrabold italic mr-2"
-              >38</span
+            <span
+              id="output_years"
+              class="text-6xl text-[#8550fb] font-extrabold italic mr-2"
+              >--</span
             >
             <span class="text-5xl font-extrabold italic">years</span>
           </div>
           <div class="output_months">
-            <span class="text-6xl text-[#8550fb] font-extrabold italic mr-2"
-              >3</span
+            <span
+              id="output_months"
+              class="text-6xl text-[#8550fb] font-extrabold italic mr-2"
+              >--</span
             >
             <span class="text-5xl font-extrabold italic">months</span>
           </div>
           <div class="output_days">
-            <span class="text-6xl text-[#8550fb] font-extrabold italic mr-2"
-              >26</span
+            <span
+              id="output_days"
+              class="text-6xl text-[#8550fb] font-extrabold italic mr-2"
+              >--</span
             >
             <span class="text-5xl font-extrabold italic">days</span>
           </div>
         </div>
       </section>
     </main>
+
+    <script>
+      const dayInput = document.getElementById("dayInput");
+      const monthInput = document.getElementById("monthInput");
+      const yearInput = document.getElementById("yearInput");
+
+      const invalid_year = document.getElementById("invalid_year");
+      const invalid_month = document.getElementById("invalid_month");
+      const invalid_day = document.getElementById("invalid_day");
+
+      dayInput.addEventListener("input", validateDate);
+      monthInput.addEventListener("input", validateDate);
+      yearInput.addEventListener("input", validateDate);
+
+      function validateDate() {
+        const day = parseInt(dayInput.value, 10);
+        const month = parseInt(monthInput.value, 10);
+        const year = parseInt(yearInput.value, 10);
+
+        // Reset validation styles
+        dayInput.style.borderColor = "";
+        monthInput.style.borderColor = "";
+        yearInput.style.borderColor = "";
+
+        let isValid = true;
+
+        if (isNaN(day) || day < 1 || day > 31) {
+          dayInput.style.borderColor = "red";
+          invalid_day.classList.remove("hidden");
+          isValid = false;
+        } else {
+          invalid_day.classList.add("hidden");
+        }
+
+        if (isNaN(month) || month < 1 || month > 12) {
+          monthInput.style.borderColor = "red";
+          invalid_month.classList.remove("hidden");
+          isValid = false;
+        } else {
+          invalid_month.classList.add("hidden");
+        }
+
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+
+        if (isNaN(year) || year < 1 || year > currentYear) {
+          yearInput.style.borderColor = "red";
+          invalid_year;
+          classList.remove("hidden");
+          isValid = false;
+        } else {
+          invalid_year.classList.add("hidden");
+        }
+
+        if (isValid) {
+          const inputDate = new Date(year, month - 1, day);
+
+          const diffYears = currentYear - year;
+          const diffMonths = currentDate.getMonth() - inputDate.getMonth();
+          const diffDays = currentDate.getDate() - inputDate.getDate();
+
+          document.getElementById("output_years").textContent = diffYears;
+          document.getElementById("output_months").textContent = diffMonths;
+          document.getElementById("output_days").textContent = diffDays;
+        } else {
+          document.getElementById("output_years").textContent = "--";
+          document.getElementById("output_months").textContent = "--";
+          document.getElementById("output_days").textContent = "--";
+        }
+      }
+    </script>
   </body>
 </html>
