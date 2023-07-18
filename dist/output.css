@@ -586,6 +586,18 @@ video {
   height: 100vh;
 }
 
+.h-1\/2 {
+  height: 50%;
+}
+
+.h-\[70vh\] {
+  height: 70vh;
+}
+
+.h-\[60vh\] {
+  height: 60vh;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -861,5 +873,19 @@ video {
   .md\:text-7xl {
     font-size: 4.5rem;
     line-height: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:m-20 {
+    margin: 5rem;
+  }
+
+  .lg\:h-1\/2 {
+    height: 50%;
+  }
+
+  .lg\:h-3\/4 {
+    height: 75%;
   }
 }
